@@ -13,7 +13,7 @@ The script uses following external API's:
 
 If everything is fine, you'll see a new post in your `vk` ,`facebook` and `telegram` groups: 
 
-![1.png]()
+![1.png](https://github.com/nicko858/smm-reposting/blob/master/screenshots/1.png)
 ## How to install
 Python3 should be already installed.
 ```bash
@@ -47,7 +47,7 @@ and remember it
 
 ### Telegram instructions
 You have to create telegram-channel, telegram-bot and get access-token.
-[This arctice](https://smmplanner.com/blog/otlozhennyj-posting-v-telegram/) will helps you to do all of this things.
+[This arcticle](https://smmplanner.com/blog/otlozhennyj-posting-v-telegram/) will helps you to do all of this things.
 If everything is fine, you'll get `telegram_bot_token`, `telegram_bot_url` and  `telegram_channel_name`.  
 Add the following records to the `.env-file`:  
 
@@ -59,10 +59,10 @@ telegram_channel_name=Your telegram channel
 
 ### Facebook instructions
 - Create account on the [facebook](https://www.facebook.com), or use existing
-- Create fan-group where you are going to post - [2.png]()
+- Create fan-group where you are going to post - ![2.png](https://github.com/nicko858/smm-reposting/blob/master/screenshots/2.png)
 - Register as a [developer](https://developers.facebook.com/)
-- Create a new application - [3.png]()
-- Using [Facebook Graph API Explorer](https://developers.facebook.com/tools/explorer/), get access token with `publish_to_groups` - permission: [3.png]()
+- Create a new application - ![3.png](https://github.com/nicko858/smm-reposting/blob/master/screenshots/3.png)
+- Using [Facebook Graph API Explorer](https://developers.facebook.com/tools/explorer/), get access token with `publish_to_groups` - permission: ![4.png](https://github.com/nicko858/smm-reposting/blob/master/screenshots/4.png)
 - Add the following records to the `.env-file`:  
 
   ```bash
