@@ -40,9 +40,9 @@ and remember it
 - Add the following records to the `.env-file`:  
 
    ```bash
-   client_id=Your application_id
-   access_token=Your access token
-   vk_group_id=Your vk_group_id
+   APP_ID=Your application_id
+   VK_ACCESS_TOKEN=Your access token
+   VK_GROUP_ID=Your vk_group_id
   ```
 
 ### Telegram instructions
@@ -52,9 +52,9 @@ If everything is fine, you'll get `telegram_bot_token`, `telegram_bot_url` and  
 Add the following records to the `.env-file`:  
 
    ```bash
-telegram_bot_token=Your bot token
-telegram_bot_url=Your bot address
-telegram_channel_name=Your telegram channel
+TELEGRAM_BOT_TOKEN=Your bot token
+TELEGRAM_BOT_URL=Your bot address
+TELEGRAM_CHANNEL_NAME=Your telegram channel
   ```
 
 ### Facebook instructions
@@ -66,8 +66,8 @@ telegram_channel_name=Your telegram channel
 - Add the following records to the `.env-file`:  
 
   ```bash
-    facebook_token=Your Facebook token
-    facebook_group=Your Facebook group id
+    FACEBOOK_TOKEN=Your Facebook token
+    FACEBOOK_GROUP=Your Facebook group id
   ```
 
 ## How to run

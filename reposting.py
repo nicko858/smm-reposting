@@ -5,7 +5,7 @@ from os import getenv
 from external_api import (
     upload_photo_to_vk,
     save_img_to_vk,
-    get_vk_upload_adress,
+    get_vk_upload_address,
     post_photo_to_vk_wall
 )
 from external_api import post_to_facebook, post_to_telegram
@@ -49,33 +49,30 @@ def get_args():
     return args
 
 
-def open_img_to_upload(path_to_img):
-    img_object = open(path_to_img, 'rb')
-    img_obj_for_vk = {'photo': img_object}
-    return img_obj_for_vk, img_object
-
-
 if __name__ == '__main__':
     load_dotenv()
     args = get_args()
     img_file_path = args.path_to_img_file
     message = args.message
-    vk_access_token = getenv("vk_access_token")
-    vk_group_id = getenv("vk_group_id")
-    bot_token = getenv("telegram_bot_token")
-    chat_id = getenv("telegram_channel_name")
-    facebook_access_token = getenv("facebook_token")
-    facebook_group_id = getenv("facebook_group")
-    img_obj_for_vk, img_obj = open_img_to_upload(img_file_path)
+
+    vk_access_token = getenv("VK_ACCESS_TOKEN")
+    vk_group_id = getenv("VK_GROUP_ID")
+    bot_token = getenv("TELEGRAM_BOT_TOKEN")
+    chat_id = getenv("TELEGRAM_CHANNEL_NAME")
+    facebook_access_token = getenv("FACEBOOK_TOKEN")
+    facebook_group_id = getenv("FACEBOOK_GROUP")
+
     try:
-        upload_url = get_vk_upload_adress(
+        upload_url = get_vk_upload_address(
             vk_group_id,
             vk_access_token
         )
-        uploaded_photo, server, img_hash = upload_photo_to_vk(
-            upload_url,
-            img_obj_for_vk
-        )
+        with open(img_file_path, 'rb') as img_file:
+            img_obj_for_vk = {'photo': img_file}
+            uploaded_photo, server, img_hash = upload_photo_to_vk(
+                upload_url,
+                img_obj_for_vk
+            )
         media_id, owner_id = save_img_to_vk(
             vk_access_token,
             uploaded_photo,
@@ -92,23 +89,26 @@ if __name__ == '__main__':
         )
     except VkAPIUnavailable as error:
         print("Error during VK posting:\n{}".format(error))
+
     try:
-        post_to_facebook(
-            facebook_access_token,
-            facebook_group_id,
-            img_obj,
-            message
-        )
+        with open(img_file_path, 'rb') as img_file:
+            post_to_facebook(
+                facebook_access_token,
+                facebook_group_id,
+                img_file,
+                message
+            )
     except FaceBookAPIUnavailable as error:
         print("Error during Facebook posting:\n{}".format(error))
+
     try:
-        post_to_telegram(
-            img_obj,
-            message,
-            chat_id,
-            bot_token
-        )
+        with open(img_file_path, 'rb') as img_file:
+            post_to_telegram(
+                img_file,
+                message,
+                chat_id,
+                bot_token
+            )
     except NetworkError as error:
         print("Error during Telegram posting:\n{}".format(error))
-    finally:
-        img_obj.close()
+

@@ -1,5 +1,6 @@
 import requests
 from requests import ConnectionError
+from requests import HTTPError
 from urllib3.exceptions import ResponseError
 import telegram
 import os
@@ -72,7 +73,7 @@ def save_img_to_vk(access_token, photo, group_id, server, img_hash):
                                                        ))
 
 
-def get_vk_upload_adress(vk_group_id, access_token):
+def get_vk_upload_address(vk_group_id, access_token):
     payload = {
         "access_token": access_token,
         "scope": "photos",
@@ -82,8 +83,7 @@ def get_vk_upload_adress(vk_group_id, access_token):
     url = "https://api.vk.com/method/photos.getWallUploadServer"
     try:
         response = requests.get(url, params=payload)
-        if not response.ok:
-            raise ResponseError
+        response.raise_for_status()
     except (ConnectionError, ResponseError):
         raise VkAPIUnavailable("{} is not available!".format(url))
     content = response.json()
@@ -122,8 +122,7 @@ def post_photo_to_vk_wall(
     url = "https://api.vk.com/method/wall.post"
     try:
         response = requests.post(url, params=payload)
-        if not response.ok:
-            raise ResponseError
+        response.raise_for_status()
     except (ConnectionError, ResponseError):
         raise VkAPIUnavailable("{} is not available!".format(url))
     content = response.json()
@@ -144,9 +143,8 @@ def post_photo_to_vk_wall(
 
 
 def post_to_telegram(photo, text, chat_id, token):
-    photo.seek(0)
     # http://spys.one/proxys/US/
-    os.environ['HTTPS_PROXY'] = "https://138.197.108.5:3128"
+    os.environ['HTTPS_PROXY'] = "https://104.248.53.46:3128"
     bot = telegram.Bot(token=token)
     bot.send_message(chat_id=chat_id, text=text)
     bot.send_photo(chat_id=chat_id, photo=photo)
@@ -158,7 +156,6 @@ def post_to_facebook(
         photo,
         message
 ):
-    photo.seek(0)
     dest_url = "{}/{}/photos".format("https://graph.facebook.com", group_id)
     payload = {
         'access_token': access_token,
@@ -167,7 +164,8 @@ def post_to_facebook(
     files = {'source': photo}
     try:
         response = requests.post(dest_url, params=payload, files=files)
-        if not response.ok:
-            raise FaceBookAPIUnavailable(response.text)
+        response.raise_for_status()
     except (ConnectionError, ResponseError):
         raise FaceBookAPIUnavailable("{} is not available!".format(dest_url))
+    except HTTPError:
+        raise FaceBookAPIUnavailable(response.text)
